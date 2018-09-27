@@ -96,9 +96,9 @@ while lines:
 
 def spells():
     i = 0
-    spellfile = shelve.open('spellbook.txt')
-    spellfile['spellbook'] = spellbook
-    spellfile.close()
+    # spellfile = shelve.open('spellbook.txt')
+    # spellfile['spellbook'] = spellbook
+    # spellfile.close()
     while i < len(spellbook):      # this can be used to search spellbook for a specific skill by name
         print('================' + '\n' +
               spellbook[i].name + '\n' +
