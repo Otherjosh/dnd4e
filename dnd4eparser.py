@@ -6,8 +6,12 @@ import re
 # prolly would work. skill text has 10 lines of info
 spellbook = []      # TODO save this skillbook as a file
 
+special = False
+specialregex = re.compile(r'^Special:')  # to check if any lines are a special effect
+skillinfo = []
 
-class skill(object):
+
+class Skill(object):
     def __init__(self, name, class_, flavor, category, action, weapon, special, target, attack, hit):
         self.name = name
         self.class_ = class_
@@ -21,45 +25,49 @@ class skill(object):
         self.hit = hit
 
 
+def striplines(lines_):
+    for line in lines_:
+        if len(line) == 0:
+            lines_.remove(line)
+        if re.search(specialregex, line):
+            global special
+            special = True
+    return lines_
+
+
 with open('dnd4edump.txt', 'r') as rf:
     counter = 0
-    lines = rf.readlines()
+    lines = striplines(rf.read().splitlines())
     rf.close()
-    cleanlines = ['']
-    special = False  # track if a skill has a special effect  # TODO do a separate iteration to determine sepcialness
-    specialregex = re.compile(r'^Special:')  # to check if any lines are a special effect
-    while cleanlines:
-        for line in lines:  # could be a method, just removing the newlines
-            line_ = line.strip()
-            if len(line_) > 0 and len(cleanlines) < 10:
-                cleanlines.append(line_)
-                if specialregex.search(line):
-                    special = True
-            # if line == '\n':
-            #     lines.remove(line)
 
-        for line in cleanlines:
-            if special and len(cleanlines) == 10:
-                newskill = skill(*cleanlines)
-                spellbook.append(newskill)
-                cleanlines = []
-                special = False
-            if not special and len(cleanlines) == 9:
-                print('not special')
-                newskill = skill(cleanlines[0],
-                                 cleanlines[1],
-                                 cleanlines[2],
-                                 cleanlines[3],
-                                 cleanlines[4],
-                                 cleanlines[5],
-                                 None,
-                                 cleanlines[6],
-                                 cleanlines[7],
-                                 cleanlines[8],
-                                 )
-                spellbook.append(newskill)
-                cleanlines = []
-# this can probably be a separate method
+
+if special:
+    while len(skillinfo) < 10:
+        skillinfo.append(lines.pop(0))
+        if len(skillinfo) == 10:
+            newskill = Skill(*skillinfo)
+            spellbook.append(newskill)
+            special = False
+    skillinfo = []
+
+
+if not special:
+    while len(skillinfo) < 9:
+        skillinfo.append(lines.pop(0))
+        if len(skillinfo) == 9:
+            newskill = Skill(skillinfo[0],
+                             skillinfo[1],
+                             skillinfo[2],
+                             skillinfo[3],
+                             skillinfo[4],
+                             skillinfo[5],
+                             None,
+                             skillinfo[6],
+                             skillinfo[7],
+                             skillinfo[8],)
+            spellbook.append(newskill)
+            special = False
+    skillinfo = []
 
     def spells():
         i = 0
