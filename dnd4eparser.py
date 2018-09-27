@@ -11,18 +11,32 @@ skillinfo = []
 
 
 # Used as a data structure, could probably make a dictionary instead of a class object
-class Skill(object):
-    def __init__(self, name, class_, flavor, category, action, weapon, special, target, attack, hit):
-        self.name = name
-        self.class_ = class_
-        self.flavor = flavor
-        self.category = category
-        self.action = action
-        self.weapon = weapon
-        self.special = special
-        self.target = target
-        self.attack = attack
-        self.hit = hit
+# class Skill(object):
+#     def __init__(self, name, class_, flavor, category, action, weapon, special, target, attack, hit):
+#         self.name = name
+#         self.class_ = class_
+#         self.flavor = flavor
+#         self.category = category
+#         self.action = action
+#         self.weapon = weapon
+#         self.special = special
+#         self.target = target
+#         self.attack = attack
+#         self.hit = hit
+def skill(name, class_, flavor, category, action, weapon, special, target, attack, hit):
+    skill_ = {
+        'name': name,
+        'class_': class_,
+        'flavor': flavor,
+        'category': category,
+        'action': action,
+        'weapon': weapon,
+        'special': special,
+        'target': target,
+        'attack': attack,
+        'hit': hit
+    }
+    return skill_
 
 
 # strips lines and removes empty lines
@@ -43,7 +57,6 @@ def checkspecial(lines_):
     while i < 9:
         try:
             if re.match(specialregex, lines_[i]):
-                print(lines_[i])
                 global special
                 special = True
         except IndexError:
@@ -63,7 +76,7 @@ while lines:
         while len(skillinfo) < 10:
             skillinfo.append(lines.pop(0))
             if len(skillinfo) == 10:
-                newskill = Skill(*skillinfo)
+                newskill = skill(*skillinfo)
                 spellbook.append(newskill)
                 special = False
         skillinfo = []
@@ -77,7 +90,7 @@ while lines:
                 break
             skillinfo.append(line_)
             if len(skillinfo) == 9:
-                newskill = Skill(skillinfo[0],
+                newskill = skill(skillinfo[0],
                                  skillinfo[1],
                                  skillinfo[2],
                                  skillinfo[3],
@@ -96,21 +109,21 @@ while lines:
 
 def spells():
     i = 0
-    spellfile = shelve.open('spellbook.txt')
-    spellfile['spellbook'] = spellbook
-    spellfile.close()
+    # spellfile = shelve.open('spellbook.txt')
+    # spellfile['spellbook'] = spellbook
+    # spellfile.close()
     while i < len(spellbook):      # this can be used to search spellbook for a specific skill by name
         print('================' + '\n' +
-              spellbook[i].name + '\n' +
-              spellbook[i].class_ + '\n' +
-              spellbook[i].flavor + '\n' +
-              spellbook[i].category + '\n' +
-              spellbook[i].action + '\n' +
-              spellbook[i].weapon + '\n' +
-              spellbook[i].special + '\n' +
-              spellbook[i].target + '\n' +
-              spellbook[i].attack + '\n' +
-              spellbook[i].hit
+              spellbook[i]['name'] + '\n' +
+              spellbook[i]['class_'] + '\n' +
+              spellbook[i]['flavor'] + '\n' +
+              spellbook[i]['category'] + '\n' +
+              spellbook[i]['action'] + '\n' +
+              spellbook[i]['weapon'] + '\n' +
+              spellbook[i]['special'] + '\n' +
+              spellbook[i]['target'] + '\n' +
+              spellbook[i]['attack'] + '\n' +
+              spellbook[i]['hit']
         )
         i += 1
 
