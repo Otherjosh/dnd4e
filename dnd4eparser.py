@@ -25,66 +25,88 @@ class Skill(object):
         self.hit = hit
 
 
+# removes empty lines
 def striplines(lines_):
     for line in lines_:
         if len(line) == 0:
             lines_.remove(line)
-        if re.search(specialregex, line):
-            global special
-            special = True
     return lines_
 
 
+def checkspecial(lines_):
+    i = 0
+    while i < 9:
+        try:
+            if re.match(specialregex, lines_[i]):
+                print(lines_[i])
+                global special
+                special = True
+        except IndexError:
+            pass
+        i += 1
+
+
 with open('dnd4edump.txt', 'r') as rf:
-    counter = 0
     lines = striplines(rf.read().splitlines())
+    print('with loop')
     rf.close()
 
 
-if special:
-    while len(skillinfo) < 10:
-        skillinfo.append(lines.pop(0))
-        if len(skillinfo) == 10:
-            newskill = Skill(*skillinfo)
-            spellbook.append(newskill)
-            special = False
-    skillinfo = []
+while lines:
+    print('while loop')
+    checkspecial(lines)
+    if special:
+        print('special = True')
+        while len(skillinfo) < 10:
+            skillinfo.append(lines.pop(0))
+            if len(skillinfo) == 10:
+                newskill = Skill(*skillinfo)
+                spellbook.append(newskill)
+                special = False
+        skillinfo = []
+        continue
+
+    if not special:
+        print('not special')
+        while len(skillinfo) < 9:
+            try:
+                line_ = lines.pop(0)
+            except IndexError:
+                break
+            skillinfo.append(line_)
+            if len(skillinfo) == 9:
+                newskill = Skill(skillinfo[0],
+                                 skillinfo[1],
+                                 skillinfo[2],
+                                 skillinfo[3],
+                                 skillinfo[4],
+                                 skillinfo[5],
+                                 'No special effects',
+                                 skillinfo[6],
+                                 skillinfo[7],
+                                 skillinfo[8],)
+                spellbook.append(newskill)
+                special = False
+        skillinfo = []
+        continue
 
 
-if not special:
-    while len(skillinfo) < 9:
-        skillinfo.append(lines.pop(0))
-        if len(skillinfo) == 9:
-            newskill = Skill(skillinfo[0],
-                             skillinfo[1],
-                             skillinfo[2],
-                             skillinfo[3],
-                             skillinfo[4],
-                             skillinfo[5],
-                             None,
-                             skillinfo[6],
-                             skillinfo[7],
-                             skillinfo[8],)
-            spellbook.append(newskill)
-            special = False
-    skillinfo = []
-
-    def spells():
-        i = 0
-        while i < len(spellbook):      # this can be used to search spellbook for a specific skill by name
-            print(
-                spellbook[i].name + '\n' +
-                spellbook[i].class_ + '\n' +
-                spellbook[i].flavor + '\n' +
-                spellbook[i].category + '\n' +
-                spellbook[i].action + '\n' +
-                spellbook[i].weapon + '\n' +
-                spellbook[i].special + '\n' +
-                spellbook[i].target + '\n' +
-                spellbook[i].attack + '\n' +
-                spellbook[i].hit
-            )
-            i += 1
+def spells():
+    i = 0
+    while i < len(spellbook):      # this can be used to search spellbook for a specific skill by name
+        print('================' +
+              spellbook[i].name + '\n' +
+              spellbook[i].class_ + '\n' +
+              spellbook[i].flavor + '\n' +
+              spellbook[i].category + '\n' +
+              spellbook[i].action + '\n' +
+              spellbook[i].weapon + '\n' +
+              spellbook[i].special + '\n' +
+              spellbook[i].target + '\n' +
+              spellbook[i].attack + '\n' +
+              spellbook[i].hit
+        )
+        i += 1
 
 spells()
 # TODO support for skills <10 lines long, skills without a special: only have 9 lines

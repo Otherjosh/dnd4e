@@ -37,3 +37,21 @@ Attack: Wisdom VS AC
 
 Hit: 1 [W] + Wisdom modifier damage, and the target and each enemy adjacent to it take a -2 penalty to all attack rolls until the start of your next turn.
 
+
+Vicious Mockery
+Bard Attack 1
+
+"You unleash a string of insults at your foe, weaving them with bardic magic to send the creatures into a blind rage."
+
+At-Will ✦ arcane, charm, implement, psychic
+
+Standard Action
+
+Ranged 10
+
+Target: One creature
+
+Attack: Charisma vs. Will
+
+Hit: 1d6 + Charisma modifier psychic damage, and the target takes a -2 penalty to attack rolls until the end of your next turn.
+Level 21: 2d6 + Charisma modifier damage.
