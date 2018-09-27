@@ -1,5 +1,6 @@
 import os
 
+# Amount of experience required for each level
 expTable = {
     1:0,
     2:1000,
@@ -32,13 +33,16 @@ expTable = {
     29:825000,
     30:1000000
 }
+# table to track what levels each class gains powers for levelup notifications. Currently doesn't have real data
 powerTable = {
     'class':[1,3,4,5,6,8],
     'class2':[2,5,8,29]
 }
+# table to track race perks
 raceTable = {
 
 }
+# table to track subrace perks
 subraceTable = {
 
 }
@@ -83,19 +87,25 @@ class CharCreate(object):
         self.reflex = 0
         self.will = 0
 
-        while self.totalexp >= expTable[self.level + 1]:    # sets level to correct value with exp entered on creation
+        # sets level to correct value with exp entered on creation
+        while self.totalexp >= expTable[self.level + 1]:
             self.level += 1
         self.halflevel = int(self.level / 2)
 
+    # will let you choose an atwill at correct level ups, and data for atwills will be stored in spellbook.txt
     def add_atwill(self, atwill):
         self.atwills.append(atwill)
 
+    # will let you choose an encounter power at correct level ups, and data for atwills will be stored in spellbook.txt
     def add_encounter(self, encounter):
         self.encounters.append(encounter)
 
+    # will let you choose a daily power at correct level ups, and data for atwills will be stored in spellbook.txt
     def add_daily(self, daily):
         self.dailies.append(daily)
 
+    # enter exp gained, notify when a new level is reached and notify user of perks for that level.
+    # todo take class and powerTable info into account notifys to add powers at correct levels
     def add_exp(self, exp):
         self.totalexp += exp
         if self.totalexp >= expTable[self.level +1]:
@@ -117,6 +127,7 @@ class CharCreate(object):
                 print('Check your feats and powers for improvements!')
                 print('Epic path time, select an Epic path!')
 
+    # used to update stats of the characters and non-AC defenses
     def update_stats(self, strength, con, dex, intel, wis, cha):
         self.stats = {
             'strength': strength,
@@ -142,48 +153,16 @@ class CharCreate(object):
             self.will = 10 + int(self.level / 2) + self.statmods['cha']
 
 
-# TODO get character info & save it in some data structure
+# TODO get character info from user
 # TODO Save information to a file
 # TODO open a previously saved character
 # TODO Track & reset skill usages
 # TODO wizards skills are weird af, gotta figure that out
-# TODO get experience, add it to total and notify user if they leveled up
-def gain_exp():         # this can probably be a class method
-    exp = input('How much exp was earned? ')
-    global totalExp
-    totalExp = totalExp + exp
-    global level
-    if totalExp > expTable[level +1]:
-        increase_level()
-        if level % 4 == 0:
-            print('Select two stats and increase them by one!')
-        elif level % 2 == 0:
-            print('Don\'t forget to update your half-levels!')
-            print('Gain a feat!')
-        elif level == 11:
-            print('Increase all of your stats by 1!')
-            print('Gain a feat!')
-            print('Check your feats and powers for improvements!')
-            print('Paragon path time, select a paragon path!')
-        elif level == 21:
-            print('Increase all of your stats by 1!')
-            print('Gain a feat!')
-            print('Check your feats and powers for improvements!')
-            print('Epic path time, select an Epic path!')
-
-
-def increase_level():           # this can probably be a class method/integrated back into add exp
-    global level
-    level += 1
-    print('Congrats! you\'ve reached level ' + level)
-    # TODO increase HP, get HP per level based on class/have player enter it when creating character
-    # TODO Figure out powers for each class per level
-    # TODO compare class and level with powerTable and prompt for a new power if match
-
-
-
+# TODO increase HP, get HP per level based on class/have player enter it when creating character
+# TODO Figure out powers for each class per level
+# TODO compare class and level with powerTable and prompt for a new power if match
 # TODO save selected skills
-# TODO provide information on skills, possibly gathered from an API?
+# TODO provide information on skills (from spellbook.txt ideally)
 # TODO Save session notes
 # TODO store & save inventory & item effects and manage inventory
 # TODO make a menu
