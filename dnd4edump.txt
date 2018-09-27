@@ -1,0 +1,39 @@
+Elemental Spirits
+Seeker Attack 1
+
+"Taking the form of blazing flame, crackling ice, sizzling lightning, or thunderous storm, elemental spirits shoot forth to do your enemy harm."
+
+At-Will ? primal, weapon; varies
+
+Standard Action
+
+Ranged Weapon
+
+Special: Choose Cold, Fire, Lightning, or Thunder whenever you use this power. Your choice determines the power's damage type.
+
+Target: One Creature
+
+Attack: Wisdom VS AC
+
+Hit: 1 [W] + Wisdom modifier damage of the chosen type. Until the end of your next turn, any creature that starts its turn adjacent to the target takes damage of the chosen type equal to your Dexterity modifier.
+
+
+Biting Swarm
+Seeker Attack 1
+
+"Stinging spirit insects swarm around your enemy."
+
+At-Will ? primal, weapon
+
+Standard Action
+
+Ranged Weapon
+
+Special: You can use this power as a ranged basic attack.
+
+Target: One Creature
+
+Attack: Wisdom VS AC
+
+Hit: 1 [W] + Wisdom modifier damage, and the target and each enemy adjacent to it take a -2 penalty to all attack rolls until the start of your next turn.
+
