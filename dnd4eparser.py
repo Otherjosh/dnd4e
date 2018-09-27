@@ -1,16 +1,14 @@
 import re
 
 
-# TODO assign each line to what piece of data it is and then pass those variables to a skill creation class
-# maybe count number of lines and have a counter for the iteration to determine which line is which? feels sloppy but
-# prolly would work. skill text has 10 lines of info
 spellbook = []      # TODO save this skillbook as a file
-
 special = False
 specialregex = re.compile(r'^Special:')  # to check if any lines are a special effect
 skillinfo = []
+debug = False  # Debug toggle, will show additional text to see flow if set to True
 
 
+# This is just being used as a data structure, doesn't need to be a class/object
 class Skill(object):
     def __init__(self, name, class_, flavor, category, action, weapon, special, target, attack, hit):
         self.name = name
@@ -38,7 +36,8 @@ def checkspecial(lines_):
     while i < 9:
         try:
             if re.match(specialregex, lines_[i]):
-                # print(lines_[i])
+                if debug:
+                    print(lines_[i])
                 global special
                 special = True
         except IndexError:
@@ -48,15 +47,18 @@ def checkspecial(lines_):
 
 with open('dnd4edump.txt', 'r') as rf:
     lines = striplines(rf.read().splitlines())
-    # print('with loop')
+    if debug:
+        print('with loop')
     rf.close()
 
 
 while lines:
-    # print('while loop')
+    if debug:
+        print('while loop')
     checkspecial(lines)
     if special:
-        # print('special = True')
+        if debug:
+            print('special = True')
         while len(skillinfo) < 10:
             skillinfo.append(lines.pop(0))
             if len(skillinfo) == 10:
@@ -67,7 +69,8 @@ while lines:
         continue
 
     if not special:
-        # print('not special')
+        if debug:
+            print('not special')
         while len(skillinfo) < 9:
             try:
                 line_ = lines.pop(0)
@@ -94,20 +97,35 @@ while lines:
 def spells():
     i = 0
     while i < len(spellbook):      # this can be used to search spellbook for a specific skill by name
-        print('================' +
-              spellbook[i].name + '\n' +
-              spellbook[i].class_ + '\n' +
-              spellbook[i].flavor + '\n' +
-              spellbook[i].category + '\n' +
-              spellbook[i].action + '\n' +
-              spellbook[i].weapon + '\n' +
-              spellbook[i].special + '\n' +
-              spellbook[i].target + '\n' +
-              spellbook[i].attack + '\n' +
-              spellbook[i].hit
-        )
+        if not debug:
+            print('================\n' +
+                  spellbook[i].name + '\n' +
+                  spellbook[i].class_ + '\n' +
+                  spellbook[i].flavor + '\n' +
+                  spellbook[i].category + '\n' +
+                  spellbook[i].action + '\n' +
+                  spellbook[i].weapon + '\n' +
+                  spellbook[i].special + '\n' +
+                  spellbook[i].target + '\n' +
+                  spellbook[i].attack + '\n' +
+                  spellbook[i].hit
+            )
+        if debug:
+            print('================' +
+                  'name: ' + spellbook[i].name + '!\n' +
+                  'class: ' + spellbook[i].class_ + '!\n' +
+                  'flavor: ' + spellbook[i].flavor + '!\n' +
+                  'category: ' + spellbook[i].category + '!\n' +
+                  'action: ' + spellbook[i].action + '!\n' +
+                  'weapon: ' + spellbook[i].weapon + '!\n' +
+                  'special: ' + spellbook[i].special + '!\n' +
+                  'target: ' + spellbook[i].target + '!\n' +
+                  'attack: ' + spellbook[i].attack + '!\n' +
+                  'hit: ' + spellbook[i].hit
+                  )
         i += 1
-    print(lines)
+    if debug:
+        print(lines)
 
 spells()
 
