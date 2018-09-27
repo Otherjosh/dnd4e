@@ -83,5 +83,4 @@ spells()
 # interate through cleanlines, if  length = 10 (?) pass the list to skill() class and wipe cleanlines
 # then continue iterating putting lines into cleanlines until length is reached again
 # maybe make a big list of skills that can be searched by the name element of the skills
-# making a change for git learning
 
