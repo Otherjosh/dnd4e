@@ -1,37 +1,38 @@
 import os
+import pprint
 
 # Amount of experience required for each level
 expTable = {
-    1:0,
-    2:1000,
-    3:2250,
-    4:3750,
-    5:5500,
-    6:7500,
-    7:10000,
-    8:13000,
-    9:16500,
-    10:20500,
-    11:26000,
-    12:32000,
-    13:39000,
-    14:47000,
-    15:57000,
-    16:69000,
-    17:83000,
-    18:99000,
-    19:119000,
-    20:143000,
-    21:175000,
-    22:210000,
-    23:255000,
-    24:310000,
-    25:375000,
-    26:450000,
-    27:550000,
-    28:675000,
-    29:825000,
-    30:1000000
+    1: 0,
+    2: 1000,
+    3: 2250,
+    4: 3750,
+    5: 5500,
+    6: 7500,
+    7: 10000,
+    8: 13000,
+    9: 16500,
+    10: 20500,
+    11: 26000,
+    12: 32000,
+    13: 39000,
+    14: 47000,
+    15: 57000,
+    16: 69000,
+    17: 83000,
+    18: 99000,
+    19: 119000,
+    20: 143000,
+    21: 175000,
+    22: 210000,
+    23: 255000,
+    24: 310000,
+    25: 375000,
+    26: 450000,
+    27: 550000,
+    28: 675000,
+    29: 825000,
+    30: 1000000
 }
 # table to track what levels each class gains powers for levelup notifications. Currently doesn't have real data
 powerTable = {
@@ -87,22 +88,28 @@ class CharCreate(object):
         self.reflex = 0
         self.will = 0
 
+        self.inventory = {}  # Dictionary to store inventory items and count
+
         # sets level to correct value with exp entered on creation
         while self.totalexp >= expTable[self.level + 1]:
             self.level += 1
         self.halflevel = int(self.level / 2)
 
     # will let you choose an atwill at correct level ups, and data for atwills will be stored in spellbook.txt
-    def add_atwill(self, atwill):
-        self.atwills.append(atwill)
+    def add_atwill(self, *atwills):
+        newatwills = []
+        for atwill in atwills:
+            self.atwills.append(atwill)
 
-    # will let you choose an encounter power at correct level ups, and data for atwills will be stored in spellbook.txt
-    def add_encounter(self, encounter):
-        self.encounters.append(encounter)
+    # will let you choose an encounter power at correct level ups, and data will be stored in spellbook.txt
+    def add_encounter(self, *encounters):
+        for encounter in encounters:
+            self.encounters.append(encounter)
 
-    # will let you choose a daily power at correct level ups, and data for atwills will be stored in spellbook.txt
-    def add_daily(self, daily):
-        self.dailies.append(daily)
+    # will let you choose a daily power at correct level ups, and data will be stored in spellbook.txt
+    def add_daily(self, dailies):
+        for daily in dailies:
+            self.dailies.append(daily)
 
     # enter exp gained, notify when a new level is reached and notify user of perks for that level.
     # todo take class and powerTable info into account notifys to add powers at correct levels
@@ -151,6 +158,19 @@ class CharCreate(object):
             self.will = 10 + int(self.level / 2) + self.statmods['wis']
         elif self.stats['cha'] >= self.stats['wis']:
             self.will = 10 + int(self.level / 2) + self.statmods['cha']
+
+    def view_inventory(self):
+        length = 0  # this is kind of redundant with using pprint, but could use this to print w/o curly braces
+        for k, v in self.inventory:
+            if len(k) > length:
+                length = len(k)
+        pprint.pprint(self.inventory)
+
+    def add_inventory(self, *items):
+        for item in items:
+            count = int(input('How many ' + item + ' are you adding?'))
+            self.inventory[item] = count
+            print(str(count) + ' ' + item + ' have been added to your inventory')
 
 
 # TODO get character info from user
