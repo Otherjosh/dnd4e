@@ -172,12 +172,30 @@ class CharCreate(object):
             self.inventory[item] = count
             print(str(count) + ' ' + item + ' have been added to your inventory')
 
+    def reduce_inventory(self, item_='', reduction=0):
+        if not item_:
+            item_ = input("What item would you like to modify?")
+        if not reduction:
+            reduction = input("How many would you like to remove from inventory?")
+        if item_ in self.inventory:
+            if reduction == self.inventory:
+                remove_inventory(item_)
+            else:
+                self.inventory[item_] -= int(reduction)
+        elif item_ not in self.inventory:
+            print(item_ + ' not found in inventory')
 
+    def remove_inventory(self, item_=''):
+        if not item_:
+            item_ = input("What item would you like to remove?")
+        if item_ in self.inventory:
+            del self.inventory[item_]
+        else:
+            print("Item not found in inventory")
 # TODO get character info from user
 # TODO Save information to a file
 # TODO open a previously saved character
 # TODO Track & reset skill usages
-# TODO wizards skills are weird af, gotta figure that out
 # TODO increase HP, get HP per level based on class/have player enter it when creating character
 # TODO Figure out powers for each class per level
 # TODO compare class and level with powerTable and prompt for a new power if match
