@@ -267,7 +267,30 @@ def add_character():
         nosub = True
     if name and char_class and exp and strength and con and dex and intel and wis and cha and race:
         if subrace or nosub:
-            CharCreate(name, char_class, exp, strength, con, dex, intel, wis, cha, race, subrace)
+            global character
+            character = CharCreate(name, char_class, exp, strength, con, dex, intel, wis, cha, race, subrace)
+
+
+def menu():
+    choice = ''
+    while choice != 'exit':
+        choice = input("Welcome to dnd4e.py! \n"
+                       "What would you like to do?\n"
+                       "Please make a selection or exit\n"
+                       "1. Add a character\n"
+                       "2. View character information\n"
+                       "3. Modify a character\n"
+                       )
+        if choice == '1':
+            add_character()
+        elif choice == '2':
+            print(character.stats)
+        elif choice == '3':
+            print("you modify a character here")
+        elif choice == 'exit':
+            break
+        else:
+            print("Invalid selection")
 # TODO save selected skills
 # TODO provide information on skills (from spellbook.txt ideally)
 # TODO Save session notes
@@ -286,4 +309,4 @@ def add_character():
 # TODO Track & reset skill usages
 
 # some kind of map interaction maybe? idk what it would do
-add_character()
+menu()
