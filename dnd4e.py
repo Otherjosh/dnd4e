@@ -73,17 +73,17 @@ class CharCreate(object):
             'cha': cha
         }
         self.statmods = {
-            'strength': int((strength - 10) /2),
-            'con': int((con - 10) /2),
-            'dex': int((dex - 10) /2),
-            'intel': int((intel - 10) /2),
-            'wis': int((wis - 10) /2),
-            'cha': int((cha - 10) /2)
+            'strength': (int(strength) - 10) / 2,
+            'con': (int(con) - 10) / 2,
+            'dex': (int(dex) - 10) / 2,
+            'intel': (int(intel) - 10) / 2,
+            'wis': (int(wis) - 10) / 2,
+            'cha': (int(cha) - 10) / 2
         }
-        self.initiative = int((self.stats[dex] - 10)/2) + int(self.level/2)
+        self.initiative = (int(self.stats['dex']) - 10) / 2 + (int(self.level) / 2)
 
         # Defenses
-        self.AC = 10 + int(self.level/2)  # will need to be expanded upon for armor/light armor/magic armor
+        self.AC = 10 + (int(self.level) / 2)  # will need to be expanded upon for armor/light armor/magic armor
         self.fortitude = 0
         self.reflex = 0
         self.will = 0
@@ -97,7 +97,6 @@ class CharCreate(object):
 
     # will let you choose an atwill at correct level ups, and data for atwills will be stored in spellbook.txt
     def add_atwill(self, *atwills):
-        newatwills = []
         for atwill in atwills:
             self.atwills.append(atwill)
 
@@ -112,7 +111,7 @@ class CharCreate(object):
             self.dailies.append(daily)
 
     # enter exp gained, notify when a new level is reached and notify user of perks for that level.
-    # todo take class and powerTable info into account notifys to add powers at correct levels
+    # todo take class and powerTable info into account notifies to add powers at correct levels
     def add_exp(self, exp):
         self.totalexp += exp
         if self.totalexp >= expTable[self.level +1]:
@@ -134,8 +133,17 @@ class CharCreate(object):
                 print('Check your feats and powers for improvements!')
                 print('Epic path time, select an Epic path!')
 
-    # used to update stats of the characters and non-AC defenses
-    def update_stats(self, strength, con, dex, intel, wis, cha):
+    def update_stats(self, strength, con, dex, intel, wis, cha):  # TODO run this after leveling up/changing stats
+        """
+        Used to update stats of character and their non-AC defanses
+        :param strength:
+        :param con:
+        :param dex:
+        :param intel:
+        :param wis:
+        :param cha:
+        :return:
+        """
         self.stats = {
             'strength': strength,
             'con': con,
@@ -160,6 +168,10 @@ class CharCreate(object):
             self.will = 10 + int(self.level / 2) + self.statmods['cha']
 
     def view_inventory(self):
+        """
+        This prints the inventory so the user can see what they have
+        :return:
+        """
         length = 0  # this is kind of redundant with using pprint, but could use this to print w/o curly braces
         for k, v in self.inventory:
             if len(k) > length:
@@ -167,16 +179,28 @@ class CharCreate(object):
         pprint.pprint(self.inventory)
 
     def add_inventory(self, *items):
+        """
+        Adds a new item and count to inventory
+        :param items:
+        :return:
+        """
         for item in items:
             count = int(input('How many ' + item + ' are you adding?'))
             self.inventory[item] = count
             print(str(count) + ' ' + item + ' have been added to your inventory')
 
-    def reduce_inventory(self, item_='', reduction=0):
+    # Inventory functions, TODO item effects
+    def modify_inventory(self, item_='', reduction=0):
+        """
+        Lowers or increases the amount of an item in inventory
+        :param item_:
+        :param reduction:
+        :return:
+        """
         if not item_:
             item_ = input("What item would you like to modify?")
         if not reduction:
-            reduction = input("How many would you like to remove from inventory?")
+            reduction = input("How many would you like to add/remove from inventory?")
         if item_ in self.inventory:
             if reduction == self.inventory:
                 remove_inventory(item_)
@@ -186,22 +210,80 @@ class CharCreate(object):
             print(item_ + ' not found in inventory')
 
     def remove_inventory(self, item_=''):
+        """
+        Removes an item from the inventory list
+        :param item_:
+        :return:
+        """
         if not item_:
             item_ = input("What item would you like to remove?")
         if item_ in self.inventory:
             del self.inventory[item_]
         else:
             print("Item not found in inventory")
-# TODO get character info from user
-# TODO Save information to a file
-# TODO open a previously saved character
-# TODO Track & reset skill usages
-# TODO increase HP, get HP per level based on class/have player enter it when creating character
-# TODO Figure out powers for each class per level
-# TODO compare class and level with powerTable and prompt for a new power if match
+
+
+def add_character():
+    """
+    Gets information for a character from the user
+    :return:
+    """
+    name = ''
+    char_class = ''
+    exp = 0
+    strength = 0
+    con = 0
+    dex = 0
+    intel = 0
+    wis = 0
+    cha = 0
+    race = ''
+    subrace = ''
+    nosub = False
+    if not name:
+        name = input("Character name: ")
+    if not char_class:
+        char_class = input("Character class: ")
+    if not exp:
+        exp = int(input("Current experience: "))
+    if not strength:
+        strength = str(input("Character strength: "))
+    if not con:
+        con = str(input("Character constitution: "))
+    if not dex:
+        dex = str(input("Character dexterity: "))
+    if not intel:
+        intel = str(input("Character intellect: "))
+    if not wis:
+        wis = str(input("Character wisdom: "))
+    if not cha:
+        cha = str(input("Character charisma: "))
+    if not race:
+        race = input("Character race: ")
+    if not subrace:
+        subrace = input("Character subrace (none if not applicable): ")
+    if subrace == 'none':
+        subrace = None
+        nosub = True
+    if name and char_class and exp and strength and con and dex and intel and wis and cha and race:
+        if subrace or nosub:
+            CharCreate(name, char_class, exp, strength, con, dex, intel, wis, cha, race, subrace)
 # TODO save selected skills
 # TODO provide information on skills (from spellbook.txt ideally)
 # TODO Save session notes
-# TODO store & save inventory & item effects and manage inventory
 # TODO make a menu
+
+# medium term goals
+# TODO Save information to a file
+# TODO open a previously saved character
+
+
+# long term goals
+# TODO GUI??
+# TODO compare class and level with powerTable and prompt for a new power if match
+# TODO Figure out powers for each class per level
+# TODO increase HP, get HP per level based on class/have player enter it when creating character
+# TODO Track & reset skill usages
+
 # some kind of map interaction maybe? idk what it would do
+add_character()
